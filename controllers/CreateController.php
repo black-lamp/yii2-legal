@@ -94,12 +94,26 @@ class CreateController extends Controller
             }
         }
 
+        // languages
+        /** @var ActiveRecord $languageModelName */
+        $languageModelName = $this->module->languageEntity['class'];
+        $languageIdField = $this->module->languageEntity['idField'];
+        $languageNameField = $this->module->languageEntity['nameField'];
+
+        $languages = $languageModelName::find()
+            ->select([$languageIdField, $languageNameField])
+            ->all();
+
         $types = LegalType::find()
             ->with('legalTypeTranslations')
             ->all();
 
         return $this->render('create', [
-            'types' => $types
+            'types' => $types,
+
+            'languages' => $languages,
+            'languageIdField' => $languageIdField,
+            'languageNameField' => $languageNameField
         ]);
     }
 }

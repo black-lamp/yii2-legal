@@ -10,6 +10,9 @@ use bl\legalAgreement\LegalModule;
  *
  * @var yii\web\View $this
  * @var LegalType[] $types
+ * @var array $languages
+ * @var string $languageIdField
+ * @var string $languageNameField
  */
 
 yii\bootstrap\BootstrapAsset::register($this);
@@ -32,8 +35,11 @@ yii\bootstrap\BootstrapAsset::register($this);
                         <?= LegalModule::t('create', 'Select lang') ?>
                     </label>
                     <select class="form-control" name="language" id="select-lang">
-                        <option value="1">English</option>
-                        <option value="2">Russian</option>
+                        <?php foreach($languages as $lang): ?>
+                            <?= Html::tag('option', $lang->$languageNameField, [
+                                'value' => $lang->$languageIdField
+                            ]) ?>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
