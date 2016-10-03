@@ -1,0 +1,28 @@
+{
+  "name": "black-lamp/yii2-legal-agreement",
+  "description": "Module for adding the legal agreements on site",
+  "keywords": ["yii2", "module", "legal", "agreement"],
+  "type": "yii2-extension",
+  "license": "GNU Public License",
+  "support": {
+    "source": "https://github.com/black-lamp/yii2-legal-agreement",
+    "issues": "https://github.com/black-lamp/yii2-legal-agreement/issues"
+  },
+  "require": {
+    "yiisoft/yii2": ">=2.0.4",
+    "yiisoft/yii2-bootstrap": "*",
+    "yii2tech/ar-position": "^1.0",
+    "black-lamp/yii2-seo": "*"
+  },
+  "authors": [
+    {
+      "name": "Vladimir Kuprienko",
+      "email": "vldmr.kuprienko@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "bl\\legalAgreement\\": ""
+    }
+  }
+}
