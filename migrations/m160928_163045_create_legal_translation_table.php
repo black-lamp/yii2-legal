@@ -8,11 +8,15 @@ class m160928_163045_create_legal_translation_table extends Migration
 {
     public function up()
     {
+        $type = ($this->getDb()->getDriverName() == 'mysql') ?
+            $this->getDb()->getSchema()->createColumnSchemaBuilder('longtext') :
+            $this->text();
+
         $this->createTable('legal_translation', [
             'id' => $this->primaryKey(),
             'legal_id' => $this->integer()->notNull(),
             'language_id' => $this->integer()->notNull(),
-            'text' => $this->text()->notNull()
+            'text' => $type
         ]);
 
         $this->addForeignKey('legal-legal_translation-FK', 'legal_translation', 'legal_id',
