@@ -1,7 +1,7 @@
 {
   "name": "black-lamp/yii2-legal-agreement",
   "description": "Module for adding the legal agreements on site",
-  "keywords": ["yii2", "module", "legal", "agreement"],
+  "keywords": ["yii2", "legal", "agreement", "license"],
   "type": "yii2-extension",
   "license": "GNU Public License",
   "support": {
@@ -17,7 +17,8 @@
   "authors": [
     {
       "name": "Vladimir Kuprienko",
-      "email": "vldmr.kuprienko@gmail.com"
+      "email": "vldmr.kuprienko@gmail.com",
+      "role": "Creator of extension"
     }
   ],
   "autoload": {

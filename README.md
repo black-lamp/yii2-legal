@@ -8,35 +8,35 @@ composer require black-lamp/yii2-legal-agreement
 ```
 or add
 ```json
-"black-lamp/yii2-legal-agreement": "*"
+"black-lamp/yii2-legal-agreement": "2.*.*"
 ```
 to the require section of your composer.json.
 #### Applying migrations
 ```
-yii migrate --migrationPath=@vendor/black-lamp/yii2-legal-agreement/migrations
+yii migrate --migrationPath=@vendor/black-lamp/yii2-legal-agreement/common/migrations
 ```
 #### Add module to application config
+Frontend module
 ```php
 'modules' => [
      // ...
-     'legal-agreement' => [
-         'class' => bl\legalAgreement\LegalModule::className(),
-         // example
-         'languageEntity' => [
-              'class' => bl\multilang\entities\Language::className(),
-              'idField' => 'id',
-              'nameField' => 'name'
-          ]
-     ]
+     'legal' => [
+         'class' => bl\legalAgreement\frontend\LegalModule::className(),
+     ],
 ]
 ```
-#### Add component if you need it
-Component for manipulations with users and legal agreements
+Backend module
 ```php
-'components' => [
+'modules' => [
      // ...
-     'legalAccept' => [
-         'class' => bl\legalAgreement\components\LegalAgreement::className()
-     ]
+     'legal' => [
+         'class' => bl\legalAgreement\frontend\LegalModule::className(),
+         'languageProvider' => [
+               'class' => bl\legalAgreement\backend\providers\DbLanguageProvider::className(),
+               'arModel' => \bl\multilang\entities\Language::className(),
+               'idField' => 'id',
+               'nameField' => 'name'
+         ]
+     ],
 ]
 ```
