@@ -8,7 +8,7 @@ composer require black-lamp/yii2-legal-agreement
 ```
 or add
 ```json
-"black-lamp/yii2-legal-agreement": "2.*.*"
+"black-lamp/yii2-legal-agreement": "1.*.*"
 ```
 to the require section of your composer.json.
 #### Applying migrations
@@ -30,7 +30,7 @@ Backend module
 'modules' => [
      // ...
      'legal' => [
-         'class' => bl\legalAgreement\frontend\LegalModule::className(),
+         'class' => bl\legalAgreement\backend\LegalModule::className(),
          'languageProvider' => [
                'class' => bl\legalAgreement\backend\providers\DbLanguageProvider::className(),
                'arModel' => \bl\multilang\entities\Language::className(),
