@@ -1,6 +1,6 @@
 {
   "name": "black-lamp/yii2-legal-agreement",
-  "description": "Module for adding the legal agreements on site",
+  "description": "Module for adding the legal agreements across dashboard",
   "keywords": ["yii2", "legal", "agreement", "license"],
   "type": "yii2-extension",
   "license": "GNU Public License",

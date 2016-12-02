@@ -1,5 +1,11 @@
-Module for adding the legal agreements on site
-==============================================
+Legal agreement module for Yii2
+===============================
+Module for adding the legal agreements across dashboard
+
+[![Latest Stable Version](https://poser.pugx.org/black-lamp/yii2-legal-agreement/v/stable)](https://packagist.org/packages/black-lamp/yii2-legal-agreement)
+[![Latest Unstable Version](https://poser.pugx.org/black-lamp/yii2-legal-agreement/v/unstable)](https://packagist.org/packages/black-lamp/yii2-legal-agreement)
+[![License](https://poser.pugx.org/black-lamp/yii2-legal-agreement/license)](https://packagist.org/packages/black-lamp/yii2-legal-agreement)
+
 Installation
 ------------
 #### Run command
@@ -15,8 +21,8 @@ to the require section of your composer.json.
 ```
 yii migrate --migrationPath=@vendor/black-lamp/yii2-legal-agreement/common/migrations
 ```
-#### Add module to application config
-Frontend module
+#### Add modules to application config
+Frontend module for displaying and accepting the agreement
 ```php
 'modules' => [
      // ...
@@ -25,7 +31,7 @@ Frontend module
      ],
 ]
 ```
-Backend module
+Backend module for work with the agreements
 ```php
 'modules' => [
      // ...
@@ -38,5 +44,16 @@ Backend module
                'nameField' => 'name'
          ]
      ],
+]
+```
+#### Add component to application config
+Component for work with agreements and users
+```php
+'components' => 
+[
+    // ...
+    'legal' => [
+        'class' => bl\legalAgreement\common\components\LegalAgreement::className()
+    ],
 ]
 ```
