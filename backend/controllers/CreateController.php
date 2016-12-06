@@ -4,11 +4,12 @@ namespace bl\legalAgreement\backend\controllers;
 use yii;
 use yii\web\Controller;
 
+use bl\legalAgreement\backend\LegalModule;
+use bl\legalAgreement\backend\providers\LanguageProviderInterface;
 use bl\legalAgreement\common\entities\Legal;
 use bl\legalAgreement\common\entities\LegalTranslation;
 use bl\legalAgreement\common\entities\LegalType;
 use bl\legalAgreement\common\entities\LegalTypeTranslation;
-use bl\legalAgreement\backend\providers\LanguageProviderInterface;
 
 /**
  * Create controller for backend Legal module
@@ -25,19 +26,17 @@ class CreateController extends Controller
     public $defaultAction = 'create';
 
     /**
-     * Method for generation the version for legal agreement
-     *
-     * @param integer $typeId
-     * @return integer
-     * @see CreateController::actionCreate()
+     * @var LanguageProviderInterface
      */
-    protected function generateVersion($typeId)
-    {
-        $version = Legal::find()
-            ->where(['type_id' => $typeId])
-            ->max('version');
+    protected $_languageProvider;
 
-        return ($version == null) ? 1 : $version + 1;
+    /**
+     * @inheritdoc
+     */
+    public function __construct($id, LegalModule $module, LanguageProviderInterface $languageProvider, $config = [])
+    {
+        $this->_languageProvider = $languageProvider;
+        parent::__construct($id, $module, $config);
     }
 
     /**
@@ -83,7 +82,6 @@ class CreateController extends Controller
             if($typeId != null) {
                 $legal = new Legal();
                 $legal->type_id = $typeId;
-                $legal->version = $this->generateVersion($type->id);
 
                 if($legal->validate() && $legal->save()) {
                     /** @var LegalTranslation $legalTranslation */
@@ -103,9 +101,7 @@ class CreateController extends Controller
             ->with('legalTypeTranslations')
             ->all();
 
-        /** @var LanguageProviderInterface $provider */
-        $provider = $this->module->container->get('bl\legalAgreement\providers\LanguageProviderInterface');
-        $languages = $provider->getLanguages();
+        $languages = $this->_languageProvider->getLanguages();
 
         return $this->render('create', [
             'types' => $types,

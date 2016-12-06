@@ -8,10 +8,11 @@ use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
+use bl\legalAgreement\backend\LegalModule;
+use bl\legalAgreement\backend\providers\LanguageProviderInterface;
 use bl\legalAgreement\common\entities\Legal;
 use bl\legalAgreement\common\entities\LegalType;
 use bl\legalAgreement\common\entities\LegalTranslation;
-use bl\legalAgreement\backend\providers\LanguageProviderInterface;
 
 /**
  * Create controller for backend Legal module
@@ -26,6 +27,20 @@ class AgreementController extends Controller
      * @inheritdoc
      */
     public $defaultAction = 'list';
+
+    /**
+     * @var LanguageProviderInterface
+     */
+    protected $_languageProvider;
+
+    /**
+     * @inheritdoc
+     */
+    public function __construct($id, LegalModule $module, LanguageProviderInterface $languageProvider, $config = [])
+    {
+        $this->_languageProvider = $languageProvider;
+        parent::__construct($id, $module, $config);
+    }
 
     /**
      * Action for render list of the legal agreements
@@ -91,9 +106,7 @@ class AgreementController extends Controller
         $types = LegalType::find()->all();
 
         // languages
-        /** @var LanguageProviderInterface $provider */
-        $provider = $this->module->container->get('bl\legalAgreement\providers\LanguageProviderInterface');
-        $languages = $provider->getLanguages();
+        $languages = $this->_languageProvider->getLanguages();
 
         // legal agreements
         $legal = Legal::find()

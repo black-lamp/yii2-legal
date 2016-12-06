@@ -8,9 +8,10 @@ use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
 
+use bl\legalAgreement\backend\LegalModule;
+use bl\legalAgreement\backend\providers\LanguageProviderInterface;
 use bl\legalAgreement\common\entities\LegalType;
 use bl\legalAgreement\common\entities\LegalTypeTranslation;
-use bl\legalAgreement\backend\providers\LanguageProviderInterface;
 
 /**
  * Type controller for backend Legal module
@@ -25,6 +26,20 @@ class TypeController extends Controller
      * @inheritdoc
      */
     public $defaultAction = 'list';
+
+    /**
+     * @var LanguageProviderInterface
+     */
+    protected $_languageProvider;
+
+    /**
+     * @inheritdoc
+     */
+    public function __construct($id, LegalModule $module, LanguageProviderInterface $languageProvider, $config = [])
+    {
+        $this->_languageProvider = $languageProvider;
+        parent::__construct($id, $module, $config);
+    }
 
     /**
      * Action for render list of the legal agreements types
@@ -69,9 +84,7 @@ class TypeController extends Controller
     public function actionEdit($typeId)
     {
         // languages
-        /** @var LanguageProviderInterface $provider */
-        $provider = $this->module->container->get('bl\legalAgreement\providers\LanguageProviderInterface');
-        $languages = $provider->getLanguages();
+        $languages = $this->_languageProvider->getLanguages();
 
         // legal types
         $type = LegalType::findOne($typeId);

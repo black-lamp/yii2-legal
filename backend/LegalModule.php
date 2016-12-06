@@ -2,8 +2,8 @@
 namespace bl\legalAgreement\backend;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Module;
-use yii\di\Container;
 
 /**
  * Module for adding the legal agreements on site
@@ -41,32 +41,21 @@ class LegalModule extends Module
     public $languageProvider;
 
     /**
-     * @var Container with dependencies
-     */
-    private $_container;
-
-    /**
-     * @return Container
-     */
-    public function getContainer()
-    {
-        return $this->_container;
-    }
-
-    /**
      * @inheritdoc
      */
     public function init()
     {
         parent::init();
-
-        $this->_container = new Container();
         $this->registerDependencies();
     }
 
     private function registerDependencies()
     {
-        $this->_container->set('bl\legalAgreement\providers\LanguageProviderInterface', $this->languageProvider);
+        if(empty($this->languageProvider)) {
+            throw new InvalidConfigException("Invalid configuration of '$this->id' module");
+        }
+
+        Yii::$container->set('bl\legalAgreement\backend\providers\LanguageProviderInterface', $this->languageProvider);
     }
 
     public static function t($category, $message, $params = [], $language = null)

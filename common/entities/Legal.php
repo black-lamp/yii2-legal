@@ -36,8 +36,9 @@ class Legal extends ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'version'], 'required'],
+            [['type_id'], 'required'],
             [['type_id', 'version'], 'integer'],
+            [['version'], 'safe'],
             [['show'], 'boolean'],
             [
                 ['type_id'], 'exist',
@@ -59,6 +60,30 @@ class Legal extends ActiveRecord
             'version' => 'Version',
             'show' => 'Show',
         ];
+    }
+
+    /**
+     * Method for generation the version for legal agreement
+     *
+     * @return integer
+     * @see CreateController::actionCreate()
+     */
+    protected function generateVersion()
+    {
+        $version = Legal::find()
+            ->where(['type_id' => $this->type_id])
+            ->max('version');
+
+        return ($version == null) ? 1 : ++$version;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function insert($runValidation = true, $attributes = null)
+    {
+        $this->version = self::generateVersion();
+        return parent::insert($runValidation, $attributes);
     }
 
     /**
