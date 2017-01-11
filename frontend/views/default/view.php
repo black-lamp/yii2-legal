@@ -1,5 +1,9 @@
 <?php
+use yii\helpers\Html;
+use yii\helpers\Url;
+
 use bl\legalAgreement\common\entities\Legal;
+use bl\legalAgreement\frontend\LegalModule;
 
 /**
  * @var \yii\web\View $this
@@ -17,6 +21,15 @@ use bl\legalAgreement\common\entities\Legal;
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <?= $agreement->translation->text ?>
+            <?= Html::a(
+                LegalModule::t('frontend', 'Accept agreement'),
+                Url::toRoute([
+                    'accept-agreement',
+                    'legalId' => $agreement->id,
+                    'userId' => Yii::$app->user->id
+                ]),
+                ['class' => 'btn btn-success pull-right']
+            ) ?>
         </div>
     </div>
 </div>

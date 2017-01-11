@@ -70,4 +70,13 @@ class DefaultController extends Controller
 
         return $this->redirect($module->redirectRoute);
     }
+
+    public function actionAcceptAgreement($legalId, $userId)
+    {
+        if(!$this->isUserAccepted($userId, $legalId)) {
+            $this->accept($userId, $legalId);
+        }
+
+        return $this->redirect($this->module->redirectRoute);
+    }
 }
