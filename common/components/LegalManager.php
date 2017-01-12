@@ -9,9 +9,9 @@ namespace bl\legalAgreement\common\components;
 
 use Yii;
 use yii\base\Component;
-use yii\base\Event;
 use yii\mail\MailerInterface;
 
+use bl\legalAgreement\common\events\LegalAccept;
 use bl\legalAgreement\common\entities\LegalUser;
 use bl\legalAgreement\common\entities\LegalUserTokens;
 
@@ -46,7 +46,10 @@ class LegalManager extends Component
         ]);
 
         if ($userLegal->insert()) {
-            $this->trigger(self::EVENT_AFTER_ACCEPT, new Event());
+            $this->trigger(self::EVENT_AFTER_ACCEPT, new LegalAccept([
+                'userId' => $user_id,
+                'legalId' => $legal_id
+            ]));
 
             return true;
         }
