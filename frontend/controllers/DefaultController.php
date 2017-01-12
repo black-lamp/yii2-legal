@@ -1,4 +1,10 @@
 <?php
+/**
+ * @link https://github.com/black-lamp/yii2-legal-agreement
+ * @copyright Copyright (c) 2016 Vladimir Kuprienko
+ * @license GNU Public License
+ */
+
 namespace bl\legalAgreement\frontend\controllers;
 
 use yii\db\ActiveQuery;
@@ -7,17 +13,11 @@ use yii\web\Controller;
 use bl\legalAgreement\frontend\LegalModule;
 use bl\legalAgreement\common\entities\Legal;
 use bl\legalAgreement\common\entities\LegalUserTokens;
-use bl\legalAgreement\common\behaviors\User;
 
 /**
  * Default controller for frontend Legal module
  *
- * @method accept(int $user_id, int $legal_id)
- * @method isUserAccepted(int $user_id, int $legal_id)
- *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
- * @link https://github.com/black-lamp/yii2-legal-agreement
- * @license https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 class DefaultController extends Controller
 {
@@ -25,15 +25,11 @@ class DefaultController extends Controller
      * @inheritdoc
      */
     public $defaultAction = 'view';
+    /**
+     * @var LegalModule
+     */
+    public $module;
 
-    public function behaviors()
-    {
-        return [
-            'user' => [
-                'class' => User::className()
-            ]
-        ];
-    }
 
     public function actionView($legalId, $langId)
     {
@@ -61,20 +57,23 @@ class DefaultController extends Controller
             ])
         ->one();
 
-        /** @var LegalModule $module */
-        $module = $this->module;
+        /** @var \bl\legalAgreement\common\components\LegalManager $legalManager */
+        $legalManager = $this->module->get('legalManager');
 
-        if(!$this->isUserAccepted($userToken->user_id, $legalId)) {
-            $this->accept($userToken->user_id, $legalId);
+        if(!$legalManager->isUserAccepted($userToken->user_id, $legalId)) {
+            $legalManager->accept($userToken->user_id, $legalId);
         }
 
-        return $this->redirect($module->redirectRoute);
+        return $this->redirect($this->module->redirectRoute);
     }
 
     public function actionAcceptAgreement($legalId, $userId)
     {
-        if(!$this->isUserAccepted($userId, $legalId)) {
-            $this->accept($userId, $legalId);
+        /** @var \bl\legalAgreement\common\components\LegalManager $legalManager */
+        $legalManager = $this->module->get('legalManager');
+
+        if(!$legalManager->isUserAccepted($userId, $legalId)) {
+            $legalManager->accept($userId, $legalId);
         }
 
         return $this->redirect($this->module->redirectRoute);

@@ -1,6 +1,7 @@
 <?php
 namespace bl\legalAgreement\frontend;
 
+use bl\legalAgreement\common\components\LegalManager;
 use Yii;
 use yii\base\Module;
 
@@ -21,12 +22,30 @@ class LegalModule extends Module
      * @inheritdoc
      */
     public $controllerNamespace = 'bl\legalAgreement\frontend\controllers';
-
     /**
      * @var string route for redirect in accept action
      * @see DefaultController::actionAccept()
      */
     public $redirectRoute = '/';
+    /**
+     * @var array configuration for LegalManager component
+     */
+    public $legalManagerComponent = [
+        'class' => LegalManager::class
+    ];
+
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+
+        $this->components = [
+            'legalManager' => $this->legalManagerComponent
+        ];
+    }
 
     public static function t($category, $message, $params = [], $language = null)
     {
