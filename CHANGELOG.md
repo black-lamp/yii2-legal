@@ -10,6 +10,7 @@ black-lamp/yii2-legal-agreement commits history
 - (#1) Added TinyMCE instead textarea
 - Added config language provider
 - Added flash message for actions in frontend module
+- Added `getByKey()` method to `LegalManager` component
 
 ### Changed
 - `LegalAgreement` component renamed to `LegalManager`

@@ -15,6 +15,7 @@ use yii\mail\MailerInterface;
 use bl\legalAgreement\common\events\LegalAccept;
 use bl\legalAgreement\common\entities\LegalUser;
 use bl\legalAgreement\common\entities\LegalUserTokens;
+use bl\legalAgreement\common\entities\Legal;
 
 /**
  * Component for manipulations with users and legal agreements
@@ -94,5 +95,22 @@ class LegalManager extends Component
         ]);
 
         return ($userToken->insert()) ? $userToken->token : false;
+    }
+
+    /**
+     * Get Legal object by key
+     *
+     * @param string $kexy
+     * @param null|integer $languageId
+     * @return Legal|null
+     */
+    public function getByKey($key, $languageId = null)
+    {
+        $agreement = Legal::find()->where(['key' => $key]);
+        if (!is_null($languageId)) {
+            $agreement = $agreement->withTranslation($languageId);
+        }
+
+        return $agreement->limit(1)->one();
     }
 }
