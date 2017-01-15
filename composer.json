@@ -1,24 +1,30 @@
 {
   "name": "black-lamp/yii2-legal-agreement",
   "description": "Module for adding the legal agreements across dashboard",
-  "keywords": ["yii2", "legal", "agreement", "license"],
+  "keywords": ["yii2", "module", "legal", "agreement", "license"],
   "type": "yii2-extension",
   "license": "GNU Public License",
   "support": {
     "source": "https://github.com/black-lamp/yii2-legal-agreement",
     "issues": "https://github.com/black-lamp/yii2-legal-agreement/issues"
   },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
   "require": {
-    "yiisoft/yii2": ">=2.0.4",
+    "yiisoft/yii2": "^2.0.4",
     "yiisoft/yii2-bootstrap": "*",
     "yii2tech/ar-position": "^1.0",
-    "black-lamp/yii2-seo": "*"
+    "2amigos/yii2-tinymce-widget" : "~1.1"
   },
   "authors": [
     {
       "name": "Vladimir Kuprienko",
       "email": "vldmr.kuprienko@gmail.com",
-      "role": "Creator of extension"
+      "role": "lead"
     }
   ],
   "autoload": {

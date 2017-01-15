@@ -1,4 +1,10 @@
 <?php
+/**
+ * @link https://github.com/black-lamp/yii2-legal-agreement
+ * @copyright Copyright (c) 2016 Vladimir Kuprienko
+ * @license GNU Public License
+ */
+
 namespace bl\legalAgreement\common\entities;
 
 use yii\db\ActiveRecord;
@@ -14,8 +20,6 @@ use yii\db\ActiveRecord;
  * @property Legal $legal
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
- * @link https://github.com/black-lamp/yii2-legal-agreement
- * @license https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 class LegalTranslation extends ActiveRecord
 {
@@ -30,24 +34,6 @@ class LegalTranslation extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return [
-            [['legal_id', 'language_id', 'text'], 'required'],
-            [['legal_id', 'language_id'], 'integer'],
-            [['text'], 'string'],
-            [
-                ['legal_id'], 'exist',
-                'skipOnError' => true,
-                'targetClass' => Legal::className(),
-                'targetAttribute' => ['legal_id' => 'id']
-            ],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -55,6 +41,16 @@ class LegalTranslation extends ActiveRecord
             'legal_id' => 'Legal ID',
             'language_id' => 'Language ID',
             'text' => 'Text',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function transactions()
+    {
+        return [
+            'default' => self::OP_INSERT | self::OP_UPDATE
         ];
     }
 

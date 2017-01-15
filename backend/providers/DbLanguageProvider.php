@@ -1,8 +1,16 @@
 <?php
+/**
+ * @link https://github.com/black-lamp/yii2-legal-agreement
+ * @copyright Copyright (c) 2016 Vladimir Kuprienko
+ * @license GNU Public License
+ */
+
 namespace bl\legalAgreement\backend\providers;
 
+use Yii;
 use yii\base\Object;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -13,42 +21,71 @@ use yii\helpers\ArrayHelper;
  * @property string $nameField
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
- * @link https://github.com/black-lamp/yii2-legal-agreement
- * @license https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 class DbLanguageProvider extends Object implements LanguageProviderInterface
 {
     /**
-     * @var string Name of Active Record model
+     * @var string Id of database component from application config
      */
-    public $arModel;
-
+    public $db = 'db';
+    /**
+     * @var string Name of table in database
+     */
+    public $tableName = 'language';
     /**
      * @var string Name of field with primary key
      */
-    public $idField;
-
+    public $idField = 'id';
     /**
      * @var string Name of field with language name
      */
-    public $nameField;
+    public $nameField = 'name';
+
+    /**
+     * @var ActiveRecord[]
+     */
+    protected $languages = [];
+
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        $db = Yii::$app->get($this->db);
+
+        /** @var ActiveRecord $entity */
+        $languages = (new Query())
+            ->select([$this->idField, $this->nameField])
+            ->from($this->tableName)
+            ->all($db);
+
+        foreach ($languages as $language) {
+            $this->languages[$language[$this->idField]] = $language[$this->nameField];
+        }
+    }
 
     /**
      * @inheritdoc
      */
     public function getLanguages()
     {
-        /** @var ActiveRecord $entity */
-        $entity = $this->arModel;
-        $languages = $entity::find()
-            ->select([$this->idField, $this->nameField])
-            ->all();
+        return $this->languages;
+    }
 
-        $result = [];
-        foreach ($languages as $language) {
-            $result[$language->{$this->idField}] = $language->{$this->nameField};
-        }
+    /**
+     * @inheritdoc
+     */
+    public function getDefault()
+    {
+        return each($this->languages);
+    }
 
-        return $result;
+    /**
+     * @inheritdoc
+     */
+    public function getNameByID($id)
+    {
+        return ArrayHelper::getValue($this->languages, $id);
     }
 }

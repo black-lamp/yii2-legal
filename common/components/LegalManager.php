@@ -9,6 +9,7 @@ namespace bl\legalAgreement\common\components;
 
 use Yii;
 use yii\base\Component;
+use yii\base\Exception;
 use yii\mail\MailerInterface;
 
 use bl\legalAgreement\common\events\LegalAccept;
@@ -22,36 +23,39 @@ use bl\legalAgreement\common\entities\LegalUserTokens;
  */
 class LegalManager extends Component
 {
+    // Events
     const EVENT_AFTER_ACCEPT = 'afterAccept';
-
-
-    /**
-     * @var string Id of mailer component from app config
-     */
-    public $mailerComponentId = 'mailer';
 
 
     /**
      * Method for accepting legal agreement by user
      *
-     * @param integer $user_id
-     * @param integer $legal_id
+     * @param integer $userId
+     * @param integer $legalId
      * @return bool returns `true` if agreement was successfully accepted
+     * @throws Exception
      */
-    public function accept($user_id, $legal_id)
+    public function accept($userId, $legalId)
     {
-        $userLegal = new LegalUser([
-            'legal_id' => $legal_id,
-            'user_id' => $user_id
-        ]);
+        if (!self::isUserAccepted($userId, $legalId)) {
+            $userLegal = new LegalUser([
+                'legal_id' => $legalId,
+                'user_id' => $userId
+            ]);
 
-        if ($userLegal->insert()) {
-            $this->trigger(self::EVENT_AFTER_ACCEPT, new LegalAccept([
-                'userId' => $user_id,
-                'legalId' => $legal_id
-            ]));
+            try {
+                if ($userLegal->insert()) {
+                    $this->trigger(self::EVENT_AFTER_ACCEPT, new LegalAccept([
+                        'userId' => $userId,
+                        'legalId' => $legalId
+                    ]));
 
-            return true;
+                    return true;
+                }
+            }
+            catch (Exception $ex) {
+                throw $ex;
+            }
         }
 
         return false;
@@ -60,41 +64,18 @@ class LegalManager extends Component
     /**
      * Method for verifying the user accept the license agreement
      *
-     * @param integer $user_id
-     * @param integer $legal_id
-     * @return bool
+     * @param integer $userId
+     * @param integer $legalId
+     * @return boolean
      */
-    public function isUserAccepted($user_id, $legal_id)
+    public function isUserAccepted($userId, $legalId)
     {
         $userLegal = LegalUser::findOne([
-            'user_id' => $user_id,
-            'legal_id' => $legal_id
+            'user_id' => $userId,
+            'legal_id' => $legalId
         ]);
 
         return ($userLegal != null);
-    }
-
-    /**
-     * Method for sending letter to the user e-mail
-     *
-     * @param string $from
-     * @param string $to
-     * @param string $subject
-     * @param string $body
-     * @return bool returns `true` if letter successfully sent
-     */
-    public function sendToEmail($from, $to, $subject, $body)
-    {
-        /** @var MailerInterface $mailer */
-        $mailer = Yii::$app->get($this->mailerComponentId);
-        $res = $mailer->compose()
-            ->setFrom($from)
-            ->setTo($to)
-            ->setSubject($subject)
-            ->setHtmlBody($body)
-            ->send();
-
-        return ($res);
     }
 
     /**

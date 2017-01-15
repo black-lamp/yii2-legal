@@ -1,24 +1,29 @@
 <?php
+/**
+ * @link https://github.com/black-lamp/yii2-legal-agreement
+ * @copyright Copyright (c) 2016 Vladimir Kuprienko
+ * @license GNU Public License
+ */
+
 namespace bl\legalAgreement\common\entities;
 
 use yii\db\ActiveRecord;
+
+use bl\legalAgreement\common\db\LegalQuery;
 
 /**
  * This is the model class for table "legal".
  *
  * @property integer $id
- * @property integer $type_id
  * @property integer $version
  * @property integer $show
+ * @property string $key
  *
- * @property LegalType $type
  * @property LegalTranslation[] $legalTranslations
  * @property LegalTranslation $translation
  * @property LegalUser[] $legalUsers
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
- * @link https://github.com/black-lamp/yii2-legal-agreement
- * @license https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 class Legal extends ActiveRecord
 {
@@ -36,16 +41,9 @@ class Legal extends ActiveRecord
     public function rules()
     {
         return [
-            [['type_id'], 'required'],
-            [['type_id', 'version'], 'integer'],
             [['version'], 'safe'],
             [['show'], 'boolean'],
-            [
-                ['type_id'], 'exist',
-                'skipOnError' => true,
-                'targetClass' => LegalType::className(),
-                'targetAttribute' => ['type_id' => 'id']
-            ],
+            [['show'], 'default', 'value' => false],
         ];
     }
 
@@ -59,6 +57,7 @@ class Legal extends ActiveRecord
             'type_id' => 'Type ID',
             'version' => 'Version',
             'show' => 'Show',
+            'key' => 'Key'
         ];
     }
 
@@ -66,12 +65,11 @@ class Legal extends ActiveRecord
      * Method for generation the version for legal agreement
      *
      * @return integer
-     * @see CreateController::actionCreate()
      */
     protected function generateVersion()
     {
         $version = Legal::find()
-            ->where(['type_id' => $this->type_id])
+            ->where(['key' => $this->key])
             ->max('version');
 
         return ($version == null) ? 1 : ++$version;
@@ -87,11 +85,22 @@ class Legal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @inheritdoc
      */
-    public function getType()
+    public function transactions()
     {
-        return $this->hasOne(LegalType::className(), ['id' => 'type_id']);
+        return [
+            'default' => self::OP_INSERT | self::OP
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     * @return LegalQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new LegalQuery(get_called_class());
     }
 
     /**

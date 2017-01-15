@@ -1,4 +1,10 @@
 <?php
+/**
+ * @link https://github.com/black-lamp/yii2-legal-agreement
+ * @copyright Copyright (c) 2016 Vladimir Kuprienko
+ * @license GNU Public License
+ */
+
 namespace bl\legalAgreement\common\entities;
 
 use yii\db\ActiveRecord;
@@ -13,8 +19,6 @@ use yii\db\ActiveRecord;
  * @property Legal $legal
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
- * @link https://github.com/black-lamp/yii2-legal-agreement
- * @license https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 class LegalUser extends ActiveRecord
 {

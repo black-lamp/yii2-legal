@@ -2,10 +2,12 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+use bl\legalAgreement\frontend\Module as LegalModule;
 use bl\legalAgreement\common\entities\Legal;
-use bl\legalAgreement\frontend\LegalModule;
 
 /**
+ * View file for Default controller in Legal frontend module
+ * 
  * @var \yii\web\View $this
  * @var Legal $agreement
  *
@@ -17,10 +19,12 @@ use bl\legalAgreement\frontend\LegalModule;
 \yii\bootstrap\BootstrapAsset::register($this);
 ?>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div>
             <?= $agreement->translation->text ?>
+        </div>
+        <div class="text-center">
             <?= Html::a(
                 LegalModule::t('frontend', 'Accept agreement'),
                 Url::toRoute([
@@ -28,7 +32,7 @@ use bl\legalAgreement\frontend\LegalModule;
                     'legalId' => $agreement->id,
                     'userId' => Yii::$app->user->id
                 ]),
-                ['class' => 'btn btn-success pull-right']
+                ['class' => 'btn btn-success']
             ) ?>
         </div>
     </div>

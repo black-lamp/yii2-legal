@@ -7,15 +7,14 @@
 
 namespace bl\legalAgreement\frontend\controllers;
 
-use yii\db\ActiveQuery;
 use yii\web\Controller;
 
-use bl\legalAgreement\frontend\LegalModule;
+use bl\legalAgreement\frontend\Module as LegalModule;
 use bl\legalAgreement\common\entities\Legal;
 use bl\legalAgreement\common\entities\LegalUserTokens;
 
 /**
- * Default controller for frontend Legal module
+ * Default controller for Legal frontend module
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
  */
@@ -31,14 +30,18 @@ class DefaultController extends Controller
     public $module;
 
 
+    /**
+     * Render the legal agreement
+     *
+     * @param integer $legalId
+     * @param integer $langId
+     * @return string
+     */
     public function actionView($legalId, $langId)
     {
         $agreement = Legal::find()
             ->where(['id' => $legalId])
-            ->with(['translation' => function($query) use($langId) {
-                /** @var ActiveQuery $query */
-                $query->andWhere(['language_id' => $langId]);
-            }])
+            ->withTranslation($langId)
             ->one();
 
         return $this->render('view', [
@@ -46,35 +49,42 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * Accept the legal agreement by user token
+     *
+     * @param integer $legalId
+     * @param string $token
+     * @return \yii\web\Response
+     */
     public function actionAccept($legalId, $token)
     {
-        /** @var LegalUserTokens $userToken */
-        $userToken = LegalUserTokens::find()
+        $userId = LegalUserTokens::find()
             ->select('user_id')
             ->where([
                 'legal_id' => $legalId,
                 'token' => $token
             ])
-        ->one();
+            ->scalar();
 
         /** @var \bl\legalAgreement\common\components\LegalManager $legalManager */
         $legalManager = $this->module->get('legalManager');
-
-        if(!$legalManager->isUserAccepted($userToken->user_id, $legalId)) {
-            $legalManager->accept($userToken->user_id, $legalId);
-        }
+        $legalManager->accept($userId, $legalId);
 
         return $this->redirect($this->module->redirectRoute);
     }
 
+    /**
+     * Accept the legal agreement
+     *
+     * @param integer $legalId
+     * @param integer $userId
+     * @return \yii\web\Response
+     */
     public function actionAcceptAgreement($legalId, $userId)
     {
         /** @var \bl\legalAgreement\common\components\LegalManager $legalManager */
         $legalManager = $this->module->get('legalManager');
-
-        if(!$legalManager->isUserAccepted($userId, $legalId)) {
-            $legalManager->accept($userId, $legalId);
-        }
+        $legalManager->accept($userId, $legalId);
 
         return $this->redirect($this->module->redirectRoute);
     }
