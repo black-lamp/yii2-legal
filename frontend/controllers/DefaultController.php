@@ -7,6 +7,7 @@
 
 namespace bl\legalAgreement\frontend\controllers;
 
+use Yii;
 use yii\web\Controller;
 
 use bl\legalAgreement\frontend\Module as LegalModule;
@@ -70,6 +71,8 @@ class DefaultController extends Controller
         $legalManager = $this->module->get('legalManager');
         $legalManager->accept($userId, $legalId);
 
+        Yii::$app->get('session')->addFlash($this->module->messageKey, $this->module->flashMessage);
+
         return $this->redirect($this->module->redirectRoute);
     }
 
@@ -85,6 +88,8 @@ class DefaultController extends Controller
         /** @var \bl\legalAgreement\common\components\LegalManager $legalManager */
         $legalManager = $this->module->get('legalManager');
         $legalManager->accept($userId, $legalId);
+
+        Yii::$app->get('session')->addFlash($this->module->messageKey, $this->module->flashMessage);
 
         return $this->redirect($this->module->redirectRoute);
     }

@@ -9,6 +9,7 @@ black-lamp/yii2-legal-agreement commits history
 - Added `key` column to `Legal` entity
 - (#1) Added TinyMCE instead textarea
 - Added config language provider
+- Added flash message for actions in frontend module
 
 ### Changed
 - `LegalAgreement` component renamed to `LegalManager`

@@ -9,6 +9,8 @@ use bl\legalAgreement\common\components\LegalManager;
  * Module for manipulation with legal agreements
  *
  * @property string $redirectRoute
+ * @property string $flashMessage
+ * @property string $messageKey
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
  * @link https://github.com/black-lamp/yii2-legal-agreement
@@ -21,9 +23,17 @@ class Module extends \yii\base\Module
      */
     public $controllerNamespace = 'bl\legalAgreement\frontend\controllers';
     /**
-     * @var string route for redirect in accept action
+     * @var string route for redirect in accept actions
      */
     public $redirectRoute = '/';
+    /**
+     * @var string message for user after agreement accepted
+     */
+    public $flashMessage = '';
+    /**
+     * @var string key for the flash message
+     */
+    public $messageKey = 'legal-agreement';
     /**
      * @var array configuration for LegalManager component
      */
