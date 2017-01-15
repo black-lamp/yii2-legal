@@ -71,7 +71,7 @@ class DefaultController extends Controller
             $model->load(Yii::$app->request->post());
 
             if ($model->save()) {
-                return $this->redirect(Url::toRoute(['/' . $this->module->id]));
+                return $this->redirect('list');
             }
         }
 
@@ -115,7 +115,7 @@ class DefaultController extends Controller
             $model->load(Yii::$app->request->post());
 
             if ($model->save()) {
-                return $this->redirect(Url::toRoute(['/' . $this->module->id]));
+                return $this->redirect('list');
             }
         }
 
@@ -137,6 +137,6 @@ class DefaultController extends Controller
             $agreement->delete();
         }
 
-        return $this->redirect(Url::toRoute(['/' . $this->module->id]));
+        return $this->redirect('list');
     }
 }

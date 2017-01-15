@@ -90,7 +90,7 @@ class Legal extends ActiveRecord
     public function transactions()
     {
         return [
-            'default' => self::OP_INSERT | self::OP
+            'default' => self::OP_INSERT | self::OP_UPDATE
         ];
     }
 
