@@ -47,7 +47,7 @@ class DefaultController extends Controller
 
         $isUserAccepted = false;
         if (!Yii::$app->user->isGuest) {
-            $isUserAccepted = $this->module->get('legalManagerComponent')
+            $isUserAccepted = $this->module->get('legalManager')
                 ->isUserAccepted(Yii::$app->user->id, $legalId);
         }
 
