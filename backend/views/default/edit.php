@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
             <?= $form->field($model, 'key') ?>
             <?= Html::submitButton(
-                LegalModule::t('create', 'Add'),
+                LegalModule::t('edit', 'Save'),
                 ['class' => 'btn btn-success pull-right']
             ) ?>
         <?php $form->end() ?>
