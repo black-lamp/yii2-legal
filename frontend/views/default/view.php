@@ -25,7 +25,7 @@ use bl\legalAgreement\common\entities\Legal;
         <div>
             <?= $agreement->translation->text ?>
         </div>
-        <?php if (!$isUserAccepted): ?>
+        <?php if (!$isUserAccepted && !Yii::$app->user->isGuest): ?>
             <div class="text-center">
                 <?= Html::a(
                     LegalModule::t('frontend', 'Accept agreement'),
