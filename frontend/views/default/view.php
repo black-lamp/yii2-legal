@@ -10,6 +10,7 @@ use bl\legalAgreement\common\entities\Legal;
  * 
  * @var \yii\web\View $this
  * @var Legal $agreement
+ * @var boolean $isUserAccepted
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
  * @link https://github.com/black-lamp/yii2-legal-agreement
@@ -24,16 +25,18 @@ use bl\legalAgreement\common\entities\Legal;
         <div>
             <?= $agreement->translation->text ?>
         </div>
-        <div class="text-center">
-            <?= Html::a(
-                LegalModule::t('frontend', 'Accept agreement'),
-                Url::toRoute([
-                    'accept-agreement',
-                    'legalId' => $agreement->id,
-                    'userId' => Yii::$app->user->id
-                ]),
-                ['class' => 'btn btn-success']
-            ) ?>
-        </div>
+        <?php if (!$isUserAccepted): ?>
+            <div class="text-center">
+                <?= Html::a(
+                    LegalModule::t('frontend', 'Accept agreement'),
+                    Url::toRoute([
+                        'accept-agreement',
+                        'legalId' => $agreement->id,
+                        'userId' => Yii::$app->user->id
+                    ]),
+                    ['class' => 'btn btn-success']
+                ) ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

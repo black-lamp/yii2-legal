@@ -45,8 +45,15 @@ class DefaultController extends Controller
             ->withTranslation($langId)
             ->one();
 
+        $isUserAccepted = false;
+        if (!Yii::$app->user->isGuest) {
+            $isUserAccepted = $this->module->get('legalManagerComponent')
+                ->isUserAccepted(Yii::$app->user->id, $legalId);
+        }
+
         return $this->render('view', [
-            'agreement' => $agreement
+            'agreement' => $agreement,
+            'isUserAccepted' => $isUserAccepted
         ]);
     }
 
