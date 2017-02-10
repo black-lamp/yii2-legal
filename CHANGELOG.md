@@ -11,6 +11,7 @@ black-lamp/yii2-legal-agreement commits history
 - Added config language provider
 - Added flash message for actions in frontend module
 - Added `getByKey()` method to `LegalManager` component
+- Created `bl\legalAgreement\frontend\behaviors\RedirectBehavior` behavior
 
 ### Changed
 - `LegalAgreement` component renamed to `LegalManager`
