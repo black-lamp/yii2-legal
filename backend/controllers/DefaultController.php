@@ -8,6 +8,7 @@
 namespace bl\legalAgreement\backend\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 
@@ -33,6 +34,38 @@ class DefaultController extends Controller
      */
     public $defaultAction = 'list';
 
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => [
+                    'list',
+                    'create',
+                    'toggle-display',
+                    'edit',
+                    'delete',
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => [
+                            'list',
+                            'create',
+                            'toggle-display',
+                            'edit',
+                            'delete',
+                        ],
+                        'roles' => ['manageLegalAgreement']
+                    ]
+                ]
+            ],
+        ];
+    }
 
     /**
      * Action display list of legal agreements
