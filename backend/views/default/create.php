@@ -58,6 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 "image"
                             ],
                             'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                            'image_class_list' => [
+                                ['title' => 'None', 'value' => ''],
+                                ['title' => 'Article big', 'value' => 'article-img big'],
+                                ['title' => 'Article small', 'value' => 'article-img small'],
+                            ],
                             'image_advtab' => true
                         ]
                     ]) ?>
